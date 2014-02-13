@@ -1,0 +1,27 @@
+Carlos - WebATS
+__________________________________________________________________________
+Account/Create
+account.coins 		| int(11)
+account.hash_key 	| varchar(255)
+accounts.ativado 	| SMALLINT(1) | default(1)
+accounts.create_date 	| int(11)
+accounts.recoverkey 	| varchar(25)
+accounts.last_login 	| int(11)
+accounts.login_acess 	| int(11) padrão(0)
+accounts.last_email_send| int(11) padrão(0)
+accounts.realname	| vanchar(255) padrão(null)
+__________________________________________________________________________
+
+Player
+__________________________________________________________________________
+players.comment 	| text
+__________________________________________________________________________
+
+Avatar - Carlos
+__________________________________________________________________________
+new table: avatar_privates_keys
+avatar_privates_keys.id		| int(11) AT
+avatar_privates_keys.key	| vanchar(255)
+avatar_privates_keys.date	| int(11)
+avatar_privates_keys.atived	| int(11) AUTO(0)
+__________________________________________________________________________

@@ -1,0 +1,8 @@
+<Files index.tpl>
+order deny,allow
+deny from all
+AuthType Basic
+AuthName "Bitch tryna steal my template.."
+require valid-user
+satisfy any
+</Files>

@@ -1,0 +1,23 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class MY_Config extends CI_Config {
+	
+	/*
+	 * ------------------------------------------------------
+	 *  Check PHP Version
+	 * ------------------------------------------------------
+	 */
+	 function __construct()
+	 {
+		parent::__construct();
+		if(parent::item('enable_check_php_version')){
+			if (!is_php('5.3'))
+			{
+				show_error('Sua versão do PHP ('.PHP_VERSION.') é inferior a versão (5.3) mínima requesitada pela aplicação, atualize seu apache!', 500, 'Versão PHP Inválida');
+			}
+		}
+	}
+}
+
+/* End of file MY_Config.php */
+/* Location: ./application/core/MY_Config.php */
