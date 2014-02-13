@@ -1,9 +1,0 @@
-{
-	"config":
-    {
-        "vendor-dir": "application/libraries/composer"
-    },
-
-    "require": {
-    }
-}
