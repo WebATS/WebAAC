@@ -59,17 +59,13 @@
 	 *  Configurações da engine.
 	 * -------------------------------------------------------------------
 	 */
-			$assign_to_config['time_active_login'] = '1400';
+			$assign_to_config['time_active_login'] = '1400';		
 
 		/*
 		 * -------------------------------------------------------------------
 		 *  Configurações Time Local
 		 * -------------------------------------------------------------------
 		 */
-		
-			$assign_to_config['template_folder'] = 'templates';
-
-			$assign_to_config['folder_views_custom'] = 'views_custom';
 
 			$assign_to_config['default_time'] = 'America/Sao_Paulo'; //http://www.php.net/manual/pt_BR/timezones.php
 		/*
@@ -382,9 +378,8 @@
 		 
 		 	$assign_to_config['layout_admin'] = 'admin3';		 	
 			$assign_to_config['layout'] = 'avatar';
-			
-
-
+			$assign_to_config['template_folder'] = 'templates';
+			$assign_to_config['folder_views_custom'] = 'views_custom';
 		
 		/*
 		 * -------------------------------------------------------------------
