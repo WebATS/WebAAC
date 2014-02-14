@@ -5,7 +5,9 @@
   <link rel="icon" href="{$template_path}/images/perso/favicon.ico" type="image/x-icon">
   <link href="{$template_path}/styles/basic.css" rel="stylesheet" type="text/css">
   <link href="{$template_path}/styles/news.css" rel="stylesheet" type="text/css">
-  <script type="text/javascript" src="{$template_path}/javascripts/generic.js"></script>
+  <link type="text/css" href="{$template_path}/css/bootstrap.css" rel="stylesheet" />
+  <link type="text/css" href="{$template_path}/css/bootstrap-responsive.css" rel="stylesheet" />
+
 
   <script type='text/javascript'>  {if $logged} var loginStatus=1; {else} var loginStatus=0; var loginStatus='false';{/if} var activeSubmenuItem='latestnews';  var IMAGES=0; IMAGES='{$template_path}/images';  var LINK_ACCOUNT=0; LINK_ACCOUNT='{$path}';  </script>
   <SCRIPT TYPE="text/javascript">
@@ -25,7 +27,12 @@ function changePage()
 </SCRIPT>
 
   <script type="text/javascript" src="{$template_path}/javascripts/initialize.js"></script>
-  {$head}
+  <script type="text/javascript" src="{$template_path}/js/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="{$template_path}/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="{$template_path}/js/jquery.validate.js"></script>
+  <script type="text/javascript" src="{$template_path}/js/script.js"></script>
+  <script type="text/javascript" src="{$template_path}/javascripts/generic.js"></script>
+
   <script type="text/javascript">
      var RecaptchaOptions = {
         theme : 'white'
