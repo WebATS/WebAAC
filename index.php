@@ -1,7 +1,7 @@
-<?php
-// Gostamos de bacon.
+<?php // Gostamos de bacon.
+
 ob_start();
-date_default_timezone_set('America/Sao_Paulo');
+
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
@@ -122,7 +122,13 @@ if (defined('ENVIRONMENT'))
  * Un-comment the $assign_to_config array below to use this feature
  *
  */
+
 	include('config.php');
+
+	/**
+	 * Set Default Time
+	 */
+	date_default_timezone_set($assign_to_config['default_time']);
 
 
 // --------------------------------------------------------------------
@@ -155,6 +161,23 @@ if (defined('ENVIRONMENT'))
 		exit("Your system folder path does not appear to be set correctly. Please open the following file and correct this: ".pathinfo(__FILE__, PATHINFO_BASENAME));
 	}
 
+
+
+	// The path to the "application" folder
+	if (is_dir($application_folder))
+	{
+		define('APPPATH', $application_folder.'/');
+	}
+	else
+	{
+		if ( ! is_dir(BASEPATH.$application_folder.'/'))
+		{
+			exit("Your application folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
+		}
+
+		define('APPPATH', BASEPATH.$application_folder.'/');
+	}
+
 /*
  * -------------------------------------------------------------------
  *  Now that we know the path, set the main path constants
@@ -180,35 +203,21 @@ if (defined('ENVIRONMENT'))
 	define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
 	
 	// Path Template
-	define('TPLDIR', 'templates/');
+	define('TPLDIR', $assign_to_config['template_folder'].'/');
 
 	// Path Template
 	define('TPLLAYOUTDIR', TPLDIR.$assign_to_config['layout'].'/');
 	
 	// Path Modules Views Custom
-	define('TPLDIR_MDCUSTOM', TPLDIR.$assign_to_config['layout'].'/views_custom/');
+	define('TPLDIR_MDCUSTOM', TPLDIR.$assign_to_config['layout'].'/'.$assign_to_config['folder_views_custom'].'/');
 
-	// The path to the "application" folder
-	if (is_dir($application_folder))
-	{
-		define('APPPATH', $application_folder.'/');
-	}
-	else
-	{
-		if ( ! is_dir(BASEPATH.$application_folder.'/'))
-		{
-			exit("Your application folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
-		}
-
-		define('APPPATH', BASEPATH.$application_folder.'/');
-	}
 	
 /* --------------------------------------------------------------------
  * LOAD THE DATAMAPPER BOOTSTRAP FILE
  * --------------------------------------------------------------------
  */
-require_once APPPATH.'third_party/datamapper/bootstrap.php';
 
+	require_once APPPATH.'third_party/datamapper/bootstrap.php';
 
 /*
  * --------------------------------------------------------------------
@@ -234,10 +243,12 @@ require_once APPPATH.'third_party/datamapper/bootstrap.php';
 	define('BASE_URL', base_url());
 	
 require_once(APPPATH.'/libraries/SmartyBC.class.php');
+
 try{
+
 	$smarty = new SmartyBC();
-	
 	$CI =& get_instance();
+
 	$CI->load->helper("url");
 	$controller = $CI->uri->segment(1);
 	$method = $CI->uri->segment(2);
@@ -245,13 +256,19 @@ try{
 	$template = $CI->config->item('layout');
 	
 	if(file_exists(TPLDIR.$template.'/alters/'.$controller.'_'.$method.'/template.tpl'))
+	{
 		$smarty->template_dir = TPLDIR.$template.'/alters/'.$controller.'_'.$method;
-	else if(file_exists(TPLDIR.$template.'/alters/'.$controller.'/template.tpl'))
+	}
+	elseif(file_exists(TPLDIR.$template.'/alters/'.$controller.'/template.tpl'))
+	{
 		$smarty->template_dir = TPLDIR.$template.'/alters/'.$controller;
+	}
 	else
+	{
 		$smarty->template_dir = TPLDIR.$template;
+	}
 
-	if($controller == 'admin')
+	if($controller === 'admin')
 	{
 		if(file_exists(TPLDIR.config_item('layout_admin').'/template.tpl'))
 		{
@@ -268,80 +285,31 @@ try{
 	 * use: <input type="hidden" name="{$get_csrf_token_name}" value="{$get_csrf_hash}" >
 	 * --------------------------------------------------------------------
 	 */
-	 $smarty->assign('get_csrf_token_name', $CI->security->get_csrf_token_name());	
-	 $smarty->assign('get_csrf_hash', $CI->security->get_csrf_hash());
+		 $smarty->assign('get_csrf_token_name', $CI->security->get_csrf_token_name());	
+		 $smarty->assign('get_csrf_hash', $CI->security->get_csrf_hash());
 	 /* --------------------------------------------------------------------
 	 * LOAD THE CONTROLLER TEMPLATE
 	 * ----------------------------------------F----------------------------
 	 */
-	if(modules::checkRun('templatewa/templatewa/getmenucategorias'))
-	{
-		$var_array = modules::run('templatewa/templatewa/getmenucategorias');
-		if(is_array($var_array))
-		{
-				$smarty->assign('menuCategorias', $var_array);
-		}
-		else
-		{
-			$smarty->assign('menuCategorias', false);
-		}
-		
-	}
-	else
-	{
-		$smarty->assign('menuCategorias', false);
-	}
+	
+	$var_array = modules::run('templatewa/templatewa/getmenucategorias');
+	(is_array($var_array)) ? $smarty->assign('menuCategorias', $var_array) : $smarty->assign('menuCategorias', FALSE);
 
-	if(modules::checkRun('templatewa/templatewa/getlangs'))
-	{
-		$var_array = modules::run('templatewa/templatewa/getlangs');
-		if(is_array($var_array))
-		{
-				$smarty->assign('langs', $var_array);
-		}
-		else
-		{
-			$smarty->assign('langs', false);
-		}
-	}
-	else
-	{
-		$smarty->assign('langs', false);
-	}
+	$var_array = modules::run('templatewa/templatewa/getlangs');
+	(is_array($var_array)) ? $smarty->assign('langs', $var_array) : $smarty->assign('langs', FALSE);
 
-	if(modules::checkRun('templatewa/templatewa/getmenu'))
-	{
-		$var_array = modules::run('templatewa/templatewa/getmenu');
-		if(is_array($var_array)){
-				$smarty->assign('menuLeft', $var_array);
-		}
-		else
-		{
-			$smarty->assign('menuLeft', false);
-		}
-	}
-	else
-	{
-		$smarty->assign('menuLeft', false);
-	}
+	$var_array = modules::run('templatewa/templatewa/getmenu');
+	(is_array($var_array)) ? $smarty->assign('menuLeft', $var_array) : $smarty->assign('menuLeft', FALSE);
 
-	$content = ob_get_contents();
-			   ob_end_clean();
-	$head = '
-	<link type="text/css" href="'.base_url().'/templates/public/css/bootstrap.css" rel="stylesheet" />
-	<link type="text/css" href="'.base_url().'/templates/public/css/bootstrap-responsive.css" rel="stylesheet" />
-	<script type="text/javascript" src="'.base_url().'/templates/public/js/jquery-1.7.1.min.js"></script>
-	<script type="text/javascript" src="'.base_url().'/templates/public/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="'.base_url().'/templates/public/js/jquery.validate.js"></script>
-	<script type="text/javascript" src="'.base_url().'/templates/public/js/script.js"></script>
-	';
-	$smarty->assign('head', $head);
+
+	$content = ob_get_contents(); ob_end_clean();
+
+
 
 	$smarty->assign('title', $CI->config->item('server_name'));
 	$smarty->assign('logged', modules::run('account/_needlogin', FALSE));
 	$smarty->assign('servers', config_item('server'));
 	$smarty->assign('servers_status', modules::run('serverstatus/_status'));
-	$smarty->assign('serverOnline', false);
 
 	$totaltime = round((microtime(true) - time()), 4);
 	$smarty->assign('path', base_url());
@@ -358,7 +326,9 @@ try{
 	$smarty->assign('method', strtolower($method));
 	$smarty->assign('content', $content);
 	$smarty->display('template.tpl');
+
 } catch (SmartyException $e) {
+
     show_error($e->getmessage());
 }
 
