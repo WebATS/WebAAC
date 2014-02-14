@@ -3,5 +3,5 @@
   deny from all
 </files>
 RewriteEngine on
-RewriteCond $1 !^(index\.php|templates|robots\.txt|autoUpdater|teste\.php|pagseguro)
+RewriteCond $1 !^(index\.php|templates|robots\.txt|pagseguro)
 RewriteRule ^(.*)$ index.php/$1 [L]
