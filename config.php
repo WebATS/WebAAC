@@ -8,16 +8,16 @@
 	 $config['db_host'] = 'localhost';  // Database Host
 	 $config['db_user'] = 'root';       // Database Username
 	 $config['db_pass'] = '';           // Database Password
-	 $config['db_data'] = '';     // Database Name
+	 $config['db_data'] = '';           // Database Name
 	
 	/*
 	 * -------------------------------------------------------------------
-	 *  ConfiguraÁıes de EMAIL
+	 *  Configura√ß√µes de EMAIL
 	 * -------------------------------------------------------------------
 	 */
 		/*
 		 * -------------------------------------------------------------------
-		 *  Qual protocolo ser· usado para enviar email?
+		 *  Qual protocolo ser√° usado para enviar email?
 		 *  Protocolos suportados:
 		 * 	MAIL, SENDMAIL e SMTP
 		 * 
@@ -26,23 +26,23 @@
 			$assign_to_config['mail_type'] = 'smtp';
 		/*
 		 * -------------------------------------------------------------------
-		 *  Qual porta ser· usada para se conectar no protocolo informado?
+		 *  Qual porta ser√° usada para se conectar no protocolo informado?
 		 * -------------------------------------------------------------------
 		 */
 			$assign_to_config['mail_port'] = 465;
 		/*
 		 * -------------------------------------------------------------------
-		 *  Em aual servidor ser· conectado usando protocolo/porta informado?
+		 *  Em aual servidor ser√° conectado usando protocolo/porta informado?
 		 * -------------------------------------------------------------------
 		 */
 			$assign_to_config['mail_host'] = 'ssl://smtp.gmail.com';
 		/*
 		 * -------------------------------------------------------------------
-		 *  Qual email/usu·rio ser· informado ao servidor do protocolo?
+		 *  Qual email/usu√°rio ser√° usado ao servidor do protocolo?
 		 *
-		 * Obs: mail_address: … usado para ser informados no campo FROM.
-		 * A informaÁ„o que ser· informada ao protocolo para possÌvel autenticaÁ„o
-		 * ser· o mail_user.
+		 * Obs: mail_address: √â usado para ser informados no campo FROM.
+		 * A informa√ß√£o que ser√° informada ao protocolo para poss√≠vel autentica√ß√£o
+		 * ser√° o mail_user.
 		 * -------------------------------------------------------------------
 		 */
 			$assign_to_config['mail_address'] = '';
@@ -50,13 +50,13 @@
 			$assign_to_config['mail_pass'] = '';
 	/*
 	 * -------------------------------------------------------------------
-	 *  Fim das ConfiguraÁıes de EMAIL
+	 *  Fim das Configura√ß√£o de EMAIL
 	 * -------------------------------------------------------------------
 	 */
 	 
 	/*
 	 * -------------------------------------------------------------------
-	 *  ConfiguraÁıes da engine.
+	 *  Configura√ß√µo da engine.
 	 * -------------------------------------------------------------------
 	 */
 			$assign_to_config['time_active_login'] = '1400';
@@ -75,7 +75,7 @@
 		 *
 		 *	Exemplo:
 		 *	$assign_to_config['worlds'][ 1 ] = 'WebATS Manager';
-		 *								/\ World ID  /\ World Name
+		 *				    /\ World ID  /\ World Name
 		 *
 		 * $assign_to_config['worlds'][0] = 'Servidor 1';
 		 * $assign_to_config['worlds'][1] = 'Servidor 2';
@@ -104,7 +104,7 @@
 		 *	Exemplo:
 		 *	$assign_to_config['worlds_config_file'][ 0 ] = 'C:\Users\Public\Documents\Servidor 1\';
 		 *	$assign_to_config['worlds_config_file'][ 1 ] = 'C:\Users\Public\Documents\Servidor 2\';
-		 *											/\ World ID  /\ World path
+		 *						/\ World ID  /\ World path
 		 *											
 		 * -------------------------------------------------------------------
 		 */
@@ -119,14 +119,14 @@
 		 */
 			/*
 			 * -------------------------------------------------------------------
-			 * VocaÁıes novos players
+			 * Voca√ß√µes de novos players
 			 *
 			 * Exemplo:
 			 * $assign_to_config['newPlayerVocations'][ 0 ][ 1 ] = 'Sorcerer Servidor 1';
 			 * $assign_to_config['newPlayerVocations'][ 1 ][ 1 ] = 'Sorcerer Servidor 2';
 			 * 
-			 * Sorcerer Servidor 1 - world_id = 0, vocaÁ„o_id = 1			
-			 * Sorcerer Servidor 2 - world_id = 1, vocaÁ„o_id = 1					      
+			 * Sorcerer Servidor 1 - world_id = 0, vocation_id = 1			
+			 * Sorcerer Servidor 2 - world_id = 1, vocation_id = 1					      
 			 * -------------------------------------------------------------------
 			 */
 
@@ -303,11 +303,11 @@
 		 * -------------------------------------------------------------------
 		 *  Check PHP Version
 		 *
-		 * O WebATS Manager necessita de uma vers„o mÌnima para funcionar,
-		 * a vers„o mÌnima È 5.3, caso teu apache esteja em uma vers„o menor
-		 * È altamente recomendavÈl atualizaÁ„o do mesmo.
+		 * O WebATS Manager necessita de uma vers√£o m√≠nima para funcionar,
+		 * a vers√£o m√≠nima √© 5.3, caso teu apache esteja em uma vers√£o menor
+		 * √© altamente recomendav√°l atualiza√ß√£o do mesmo.
 		 * Mas caso esteje ciente dos erros caso queira desativar esta checagem
-		 * basta alterar a v·riavel para FALSE.
+		 * basta alterar a v√°riavel para FALSE.
 		 * -------------------------------------------------------------------
 		 */
 		 
@@ -323,9 +323,9 @@
 		
 		/*
 		 * -------------------------------------------------------------------
-		 *  P·gina padr„o.
+		 *  P√°gina padr√£o.
 		 * 
-		 * SÛ altere aqui caso esteja ciente do que esteja fazendo.
+		 * S√≥ altere aqui caso esteja ciente do que esteja fazendo.
 		 * -------------------------------------------------------------------
 		 */
 		 
@@ -333,9 +333,9 @@
 		
 		/*
 		 * -------------------------------------------------------------------
-		 *  URL Padr„o da AplicaÁ„o.
+		 *  URL Padr√£o da Aplica√ß√£o.
 		 *
-		 * J· esta configurado um modo para auto carregar URL padr„o.
+		 * J√° esta configurado um modo para auto carregar URL padr√£o.
 		 * -------------------------------------------------------------------
 		 */
 		 
@@ -345,9 +345,8 @@
 		 * -------------------------------------------------------------------
 		 *  Time Cache Language
 		 *
-		 * Aqui È configuraÁ„o em SEGUNDOS quanto tempo aplicaÁ„o ir· atualizar
-		 * o cache do idioma do banco de dados, È recomendavel deixar em torno
-		 * de 180 h· 300 segundos
+		 * Aqui √© configura√ß√£o em SEGUNDOS quanto tempo aplica√ß√£o ir√° atualizar
+		 * o cache do idioma do banco de dados.
 		 * -------------------------------------------------------------------
 		 */
 		 
@@ -363,8 +362,8 @@
 		 * -------------------------------------------------------------------
 		 *  Template
 		 *
-		 * Escolha aqui qual template ser· carregado em sua aplicaÁ„o
-		 * Os templates est„o de padr„o armazena na pasta "templates"
+		 * Escolha aqui qual template ser√° carregado em sua aplica√ß√£o
+		 * Os templates est√£o de padr√£o armazenadas na pasta "templates"
 		 * -------------------------------------------------------------------
 		 */
 		 
@@ -378,24 +377,24 @@
 		 * -------------------------------------------------------------------
 		 *  Pseudo-Variaveis
 		 *
-		 * ConfiguraÁıes dos brackets das pseudo-variaveis do keywords.php
+		 * Configura√ß√µes dos brackets das pseudo-variaveis do keywords.php
 		 *
 		 * Exemplo: {website_url}
 		 *
-		 * SÛ altere se estiver ciente do que esta fazendo.
+		 * S√≥ altere se estiver ciente do que esta fazendo.
 		 * -------------------------------------------------------------------
 		 */
 			 $assign_to_config['open_bracket'] = '{';
 			 $assign_to_config['close_bracket'] = '}';
 	 /*
 	 * -------------------------------------------------------------------
-	 *  Fim das configuraÁıes da engine.
+	 *  Fim das configura√ß√µes da engine.
 	 * -------------------------------------------------------------------
 	 */
 	 
 	 /*
 	 * -------------------------------------------------------------------
-	 *  SEGURAN«A
+	 *  SEGURAN√áA
 	 * -------------------------------------------------------------------
 	 */
 	
