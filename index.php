@@ -247,11 +247,14 @@ require_once(APPPATH.'/libraries/SmartyBC.class.php');
 try{
 
 	$smarty = new SmartyBC();
-	$CI =& get_instance();
+	$CI =&get_instance();
 
-	$CI->load->helper("url");
+	$CI->load->helper('url');
 	$controller = $CI->uri->segment(1);
 	$method = $CI->uri->segment(2);
+	$smarty->compile_dir = APPPATH.'/compile';
+	$smarty->cache_dir = APPPATH.'/cache';
+	$smarty->config_dir = APPPATH.'/config';
 	
 	$template = $CI->config->item('layout');
 	
@@ -268,29 +271,7 @@ try{
 		$smarty->template_dir = TPLDIR.$template;
 	}
 
-	if($controller === 'admin')
-	{
-		if(file_exists(TPLDIR.config_item('layout_admin').'/template.tpl'))
-		{
-			$smarty->template_dir = TPLDIR.config_item('layout_admin').'';
-		}
-	}
-	
-	$smarty->compile_dir = APPPATH.'/compile';
-	$smarty->cache_dir = APPPATH.'/cache';
-	$smarty->config_dir = APPPATH.'/config';
-	 
-	 /* --------------------------------------------------------------------
-	 * ASSING CSRF FUNCTIONS TO TEMPLATE
-	 * use: <input type="hidden" name="{$get_csrf_token_name}" value="{$get_csrf_hash}" >
-	 * --------------------------------------------------------------------
-	 */
-		 $smarty->assign('get_csrf_token_name', $CI->security->get_csrf_token_name());	
-		 $smarty->assign('get_csrf_hash', $CI->security->get_csrf_hash());
-	 /* --------------------------------------------------------------------
-	 * LOAD THE CONTROLLER TEMPLATE
-	 * ----------------------------------------F----------------------------
-	 */
+	($controller == 'admin' and file_exists(TPLDIR.config_item('layout_admin').'/template.tpl')) ? $smarty->template_dir = TPLDIR.config_item('layout_admin').'' : FALSE;
 	
 	$var_array = modules::run('templatewa/templatewa/getmenucategorias');
 	(is_array($var_array)) ? $smarty->assign('menuCategorias', $var_array) : $smarty->assign('menuCategorias', FALSE);
@@ -311,7 +292,7 @@ try{
 	$smarty->assign('servers', config_item('server'));
 	$smarty->assign('servers_status', modules::run('serverstatus/_status'));
 
-	$totaltime = round((microtime(true) - time()), 4);
+
 	$smarty->assign('path', base_url());
 	$smarty->assign('uri_string', $CI->uri->segment(1));
 	$smarty->assign('template_path', base_url(TPLDIR.$template));
@@ -320,11 +301,12 @@ try{
 	$smarty->assign('server_name', $CI->config->item('server_name'));
 
 
-	$smarty->assign('renderTime', $totaltime);
+	$smarty->assign('renderTime', round((microtime(true) - time()), 4));
 	$smarty->assign('memory_usage', $CI->benchmark->memory_usage());
 	$smarty->assign('controller', strtolower($controller));
 	$smarty->assign('method', strtolower($method));
 	$smarty->assign('content', $content);
+	
 	$smarty->display('template.tpl');
 
 } catch (SmartyException $e) {
