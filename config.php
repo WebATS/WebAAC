@@ -405,6 +405,11 @@
 	 *  SEGURANÇA
 	 * -------------------------------------------------------------------
 	 */
+		/**
+		 * Tempo que levará para session de previlégios a expirar.
+		 * Obs: Em minutos.
+		 */
+		$assign_to_config['time_session_security'] = '1';
 	
 /* End of file config.php */
 /* Location: ./config.php */
