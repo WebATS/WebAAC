@@ -41,45 +41,45 @@ class Check_Modulo
 		$this->_ci =& get_instance();
 		$this->_ci->load->helper('url');
 		$this->_ci->lang->load('Web_ATS', true);
-		if(!empty($_GET['lang'])){
+
+
+        /**
+         * Caso haja alguma requesição de troca de language, é capturado e definido na session do usuário.
+         */
+        
+		if(!empty($_GET['lang']))
+        {
 			$this->_ci->session->set_userdata(array('lang_select' => $this->_ci->input->get('lang', TRUE)));
-			log_message('debug', "[ HOOK Lang ] Language ".$this->_ci->input->get('lang', TRUE)." configured");
 			redirect(uri_string(), 'refresh');
 		}
+
+        /**
+         * Captura os parametros da URL, caso o usuário não tenha definido alguma requesição de página é retornado página padrão
+         */
+        
 		if(!$this->__getParam(1) and !$this->__getParam(2))
 		{
 			$match = explode('/', $this->_ci->config->item('default_page'));
 			$this->_class = $match[0];
-			if(isset($match[1]))
-			{
-				$this->_method = $match[1];
-			}
-			else
-			{
-				$this->_method = 'index';
-			}
+            (isset($match[1])) ? $this->_method = $match[1] : $this->_method = 'index';
 		}
 		else
 		{
 			$this->_class = $this->__getParam(1);
-			if($this->__getParam(2))
-			{
-				$this->_method = $this->__getParam(2);
-			}
-			else
-			{
-				$this->_method = 'index';
-			}
+            ($this->__getParam(2)) ? $this->_method = $this->__getParam(2) : $this->_method = 'index';
 		}
-		$where = "nome = '$this->_class/$this->_method' AND tipo = 'page' OR nome = '$this->_class' AND tipo = 'page'";
-		$query = $this->_ci->db->where($where);
-		$query = $query->get('web_ats_protect_pages', '1');
+
+        $this->_ci->db->where('nome', "$this->_class/$this->_method");
+        $this->_ci->db->where('tipo', 'page');
+        $this->_ci->db->or_where('nome', $this->_class);
+        $this->_ci->db->where('tipo', 'page');
+
+		$query = $this->_ci->db->get('web_ats_protect_pages', '1');
 
 		if($query->num_rows())
 		{
-			$row = $query->result_array();
-			modules::run('account/_needlogin', TRUE, $row[0]['acess']);
-		
+			$row = $query->result();
+			modules::run('account/_needlogin', TRUE, $row[0]->nome);
 		}
 	}
 
@@ -109,106 +109,17 @@ class Check_Modulo
 	 * @access	public
 	 * @return	__tratarString function or error
 	 */
-     function checkModulo($content) {
-        // Busca parÃ¢metros de checagem dentro do modulo chamado
-        if (preg_match_all('#<!-- CHECK: (.*?) -->#', $content, $matches)) {
-            foreach ($matches[1] as $check) {
-                $variavel = $check;
-            }
-            // ParÃ¢metro <!-- CHECK: TRUE -->
-            if ($check == 'TRUE') {
-                if (preg_match_all('#<!-- MODULO NAME: (.*?) -->#', $content, $matches)) {
-                    foreach ($matches[1] as $check2) {
-                        $this->last_modulo_name = $check2;
-                    }
-                }
-           		if (preg_match_all('#<!-- CHECK EXIST DB: (.*?) -->#', $content, $matches)) {
-                    foreach ($matches[1] as $table) {
-                        $query = mysql_query("SELECT * from $table ");
-							if (!$query) {
-								$this->_lastError = 'Tabela Banco De Dados: '.$table.' não encontrado.<p>';
-								return false;
-							}
-						}
-				}
-
-				if (preg_match_all('#<!-- CHECK EXIST DB: (.*?) -->#', $content, $matches)) {
-                    foreach ($matches[1] as $table) {
-                        $query = mysql_query("SELECT * from $table ");
-							if (!$query) {
-								$this->_lastError = 'Tabela Banco De Dados: '.$table.' não encontrado.';
-								return false;
-							}
-						}
-				}
-                //ParÃ¢metro: <!-- CHECK DB: id, name FROM logs --> executa a query, e confere se todas tables e rows do módulos são existentes.
-                if (preg_match_all('#<!-- CHECK DB: (.*?) -->#', $content, $matches)) {
-                    foreach ($matches[1] as $table) {
-                        $query = mysql_query("SELECT $table ");
-                        if (!mysql_num_rows($query)) {
-
-                            if (preg_match_all('#<!-- INSERT NEW LANG: (.*?)/(.*?)/(.*?) -->#', $content, $matches)) {
-                                $setCache->DeleteCache('' . $WEBATS['folder']['layouts'] . '/' . $this->loadLayout() . '/' . $WEBATS['folder']['cache'] . '/');
-                                foreach ($matches[1] as $lang) {
-                                    $lang = $lang;
-                                }
-                                foreach ($matches[2] as $titulo) {
-                                    $titulo = $titulo;
-                                }
-                                foreach ($matches[3] as $imgDir) {
-                                    $imgDir = $imgDir;
-                                }
-                                $query = mysql_query("SELECT * FROM " . $this->tableName('web_ats_langs') . " WHERE lang = '$lang' ");
-                                if (!mysql_num_rows($query)) {
-
-                                    if (file_exists('' . $WEBATS['folder']['modulos'] . '/' . $this->last_modulo_dir . '/imagens/' . $imgDir . '')) {
-                                        $imgDir = '' . $WEBATS['folder']['modulos'] . '/' . $this->last_modulo_dir . '/imagens/' . $imgDir . '';
-                                        $data = array(
-                                            'lang' => '' . $lang . '',
-                                            'nome' => '' . $titulo . '',
-                                            'img' => '' . $imgDir . ''
-                                        );
-                                        $this->_ci->db->insert('web_ats_langs', $data);;
-                                    }
-                                }
-                            }
-                            if (preg_match_all('#<!-- UPDATE DB LANG: (.*?) -->#', $content, $matches)) {                               
-                                foreach ($matches[1] as $lang) {
-                                    if (file_exists("".APPPATH."modules/$this->_LastController/install/$lang".EXT."")) {
-                                        include ("".APPPATH."modules/$this->_LastController/install/$lang".EXT."");
-
-                                        foreach ($setLang as $n => $b) {
-                                            $data = array(
-                                                'lang' => '' . $lang . '',
-                                                'variavel' => '' . $n . '',
-                                                'tradu' => '' . $b . '',
-                                                'sistema' => '' . $this->_LastController . ''
-                                            );
-                                            $this->_ci->db->insert('web_ats_traducoes', $data);
-                                        }
-                                    } else {
-                                        $this->_lastError = "UPDATE DB: Arquivo ".APPPATH."modules/$this->_LastController/install/$lang".EXT." inexistente.";
-                                        return false;
-                                    }
-                                }
-                            } 
-                            else 
-                            {
-                                $this->_lastError = 'CHECK DB: ' . $table . ' inexistentes.';
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return true;
+    function checkModulo($content) 
+    {
+        // surprise
+        return TRUE;
     }
+
 	public function __Check()
 	{	
 			$ConfigsValue = $this->_ci->load->library('ConfigsValue');
             
-			if($ConfigsValue->getConfig('closedAAC') and !modules::run('account/_needlogin', FALSE, 6) and $this->_class.'/'.$this->_method != 'account/login' and $this->_class.'/'.$this->_method != 'account/logout' and $this->_class != 'admin')
+			if($ConfigsValue->getConfig('closedAAC') and $this->_class.'/'.$this->_method != 'account/login' and $this->_class.'/'.$this->_method != 'account/logout' and $this->_class != 'admin' and modules::run('account/_needlogin', FALSE, 'closed_aac') == FALSE)
 			{
 				$this->_LocalVariaveis = $ConfigsValue->getConfig('closedAACDefaultPage');
 				$this->_LocalAtivado = '1';
@@ -249,9 +160,9 @@ class Check_Modulo
 				{
 
 					$search = array( '#use_method#' );
-		          $replace = array( $this->_method );
+		          	$replace = array( $this->_method );
 
-		                $content = preg_replace($search, $replace, $this->_LocalVariaveis);
+		            $content = preg_replace($search, $replace, $this->_LocalVariaveis);
 					if (preg_match_all('#{load (.*?) (.*?)}#', $content, $matches))
 					{
 						
@@ -265,7 +176,7 @@ class Check_Modulo
 							$controller = explode("/", $mod);
 							$this->_ci->benchmark->mark($controller[0].'_start');
 
-							if(@$matches[1][$i] == 'modulo') 
+							if(isset($matches[1][$i]) and $matches[1][$i] == 'modulo') 
                             {
 								$this->_LastController = $controller[0];
 									/*if (file_exists("".APPPATH."/modules/$this->_LastController/controllers/$this->_LastController".EXT."")) */
@@ -279,62 +190,64 @@ class Check_Modulo
 									if ($MX_Router->locate(array(@$controller[0], $controller_1, true))) 
 									{
 										$this->_LastCall .= $mod;
-												$where = "nome = '$mod' AND tipo = 'modulo' or nome = '$controller[0]' AND tipo = 'modulo'";
-												$query = $this->_ci->db->where($where);
-												$query = $query->get('web_ats_protect_pages', '1');
-												if($query->num_rows())
+										$this->_ci->db->where('nome', $mod);
+								        $this->_ci->db->where('tipo', 'modulo');
+								        $this->_ci->db->or_where('nome', $controller[0]);
+								        $this->_ci->db->where('tipo', 'modulo');
+										$query = $this->_ci->db->get('web_ats_protect_pages', '1');
+
+
+										if($query->num_rows())
+										{
+											$row = $query->result_array();
+
+											if(modules::run('account/_needlogin', FALSE, $row[0]['nome'] ) )
+											{
+												if (modules::checkRun($mod)) 
 												{
-													$row = $query->result_array();
-													if(modules::run('account/_needlogin', FALSE, $row[0]['acess']))
+													if ($this->checkModulo($mod) == true)
 													{
-														if (modules::checkRun($mod)) 
-														{
-															if ($this->checkModulo($mod) == true)
-															{
-																echo modules::run($mod);
+														echo modules::run($mod);
 
-															}
-															else
-															{
-																echo modules::run('error/displayError', $this->_lastError);
-															}
-
-														}
-														else
-														{
-															echo modules::run('error/displayError', 'HOOK_INVALID_METHOD', 'error', 'ATT', 'error', array($mod));	
-														}
 													}
 													else
 													{
-														if(!$row[0]['acess']){
-															echo modules::run('error/displayError', 'ERROR_LABEL_NEED_LOGIN', 'alert');	
-														}
+														echo modules::run('error/displayError', $this->_lastError);
 													}
-												
+
 												}
 												else
 												{
-													
-													if (modules::checkRun($mod)) 
-														{
-															if ($this->checkModulo($mod) == true) 
-															{													
-																echo modules::run($mod);		
-															}else
-															{				
-																echo modules::run('error/displayError', $this->_lastError);
-															}	
-															
-														}														
-														else
-														{
-															echo modules::run('error/displayError', 'HOOK_INVALID_METHOD', 'error', 'ATT', 'error', array($mod));															
-														}		
+													echo modules::run('error/displayError', 'HOOK_INVALID_METHOD', 'error', 'ATT', 'error', array($mod));	
 												}
-												log_message('debug', '[ hook ] Carregado Modulo Controller: '.$mod);
-											
+											}
+											else
+											{
+												echo modules::run('error/displayError', 'ERROR_LABEL_NEED_LOGIN', 'alert');															
+											}
 										
+										}
+										else
+										{													
+											if (modules::checkRun($mod)) 
+											{
+												if ($this->checkModulo($mod) == true) 
+												{													
+													echo modules::run($mod);		
+												}
+												else
+												{				
+													echo modules::run('error/displayError', $this->_lastError);
+												}	
+												
+											}														
+											else
+											{
+												echo modules::run('error/displayError', 'HOOK_INVALID_METHOD', 'error', 'ATT', 'error', array($mod));															
+											}		
+										}
+										log_message('debug', '[ hook ] Carregado Modulo Controller: '.$mod);
+
 									}
 									else
 									{
@@ -344,43 +257,43 @@ class Check_Modulo
 							elseif(@$matches[1][$i] == 'view')
 							{
 								$this->_LastCall .= $mod;
-		
-									$where = "nome = '$mod' AND tipo = 'modulo'";
-									$query = $this->_ci->db->where($where);
-									$query = $query->get('web_ats_protect_pages', '1');
-									if($query->num_rows())
+								$this->_ci->db->where('nome', $mod);
+						        $this->_ci->db->where('tipo', 'modulo');
+								$query = $this->_ci->db->get('web_ats_protect_pages', '1');
+
+								if($query->num_rows())
+								{
+									$row = $query->result_array();
+									if(modules::run('account/_needlogin', FALSE, $row[0]['nome'] ) )
 									{
-										$row = $query->result_array();
-										if(modules::run('account/_needlogin', FALSE, $row[0]['acess']))
+										if($this->_ci->load->Check_View($mod))
 										{
-											if($this->_ci->load->Check_View($mod)){
-												$this->_ci->load->view($mod);	
-												log_message('debug', '[ hook ] Carregado View Controller: '.$mod);
-											}
-											else
-											{
-												echo modules::run('error/displayError', 'HOOK_VIEW_NOT_FOUND', 'error', 'ATT', 'error', array($mod));	
-											}		
-										}
-										else
-										{
-											if(!$row[0]['acess']){
-												echo modules::run('error/displayError', 'ERROR_LABEL_NEED_LOGIN', 'alert', 'ATT');
-											}
-										}
-									
-									}
-									else
-									{
-										if($this->_ci->load->Check_View($mod)){
 											$this->_ci->load->view($mod);	
 											log_message('debug', '[ hook ] Carregado View Controller: '.$mod);
 										}
 										else
 										{
 											echo modules::run('error/displayError', 'HOOK_VIEW_NOT_FOUND', 'error', 'ATT', 'error', array($mod));	
-										}
-									}								
+										}		
+									}
+									else
+									{
+										echo modules::run('error/displayError', 'ERROR_LABEL_NEED_LOGIN', 'alert', 'ATT');										
+									}
+								
+								}
+								else
+								{
+									if($this->_ci->load->Check_View($mod))
+									{
+										$this->_ci->load->view($mod);	
+										log_message('debug', '[ hook ] Carregado View Controller: '.$mod);
+									}
+									else
+									{
+										echo modules::run('error/displayError', 'HOOK_VIEW_NOT_FOUND', 'error', 'ATT', 'error', array($mod));	
+									}
+								}								
 							} 
 							
 							$this->_ci->benchmark->mark($controller[0].'_end');
