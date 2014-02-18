@@ -11,36 +11,36 @@
 class user_grupos extends DataMapper {
 	var $table = "web_ats_grupos";
 
-    function __construct()
-  	{
-		parent::__construct();
-   	}
+      function __construct()
+      {
+         parent::__construct();
+      }
 
-   	public function getAcess($system)
+   	public function getAcess($system, $accountUserGroup)
    	{
-   		$userGrup = modules::run('account/_needlogin')->login_acess;
-   		$this->where('id', $userGrup);
+   		$this->where('id', $accountUserGroup);
    		$this->get();
 
    		if(!$this->id)
    		{ 
    			return FALSE;
          }
-   			$grupo_acessos = new user_grupos_acess();
-   			$grupo_acessos->where('grupo_id', $userGrup);
-   			$grupo_acessos->where('access_system', $system);
-   			$explode = explode('/', $system);
-            $grupo_acessos->or_where('grupo_id', $userGrup);
-   			$grupo_acessos->where('access_system', $explode[0]);
-	   		$grupo_acessos->get();
-	   		//$grupo_acessos->check_last_query();
-            //echo $grupo_acessos->grupo_id;
-	   		if($grupo_acessos->grupo_id)
-	   		{
-             
-	   			return TRUE;
-	   		}
-	   		return FALSE;
+         
+			$grupo_acessos = new user_grupos_acess();
+			$grupo_acessos->where('grupo_id', $userGrup);
+			$grupo_acessos->where('access_system', $system);
+			$explode = explode('/', $system);
+         $grupo_acessos->or_where('grupo_id', $userGrup);
+			$grupo_acessos->where('access_system', $explode[0]);
+   		$grupo_acessos->get();
+   		//$grupo_acessos->check_last_query();
+         //echo $grupo_acessos->grupo_id;
+   		if($grupo_acessos->grupo_id)
+   		{
+   			return TRUE;
+   		}
+
+   		return FALSE;
    	}
    	
  }
