@@ -53,7 +53,7 @@ class Account extends MX_Controller {
 		$data['last_login'] = $this->account->last_login;
 		$data['premdays'] = $this->account->premdays;
 		$data['email'] = $this->account->email;
-		$data['login_acess'] = $this->account->login_acess;
+		$data['group_access'] = $this->account->group_access;
 		$data['coins'] = $this->account->coins;
 		$data['recoverkey'] = $this->account->recoverkey;
 
@@ -68,7 +68,8 @@ class Account extends MX_Controller {
 			$this->session->unset_userdata('accountID');
 			$this->session->unset_userdata('accountName');
 			$this->session->unset_userdata('accountPassword');
-			$this->session->unset_userdata('login_acess');
+			$this->session->unset_userdata('security_prev');
+			
 			$this->session->set_flashdata('logout', array('body'=> 'SUCESS_LOGOUT', 'type' => 'info'));
 			if (is_array($customessage)) 
 			{	
@@ -575,10 +576,11 @@ class Account extends MX_Controller {
 			}
 	}
 
-	public function _needlogin($redirect=TRUE, $acess=FALSE)
+	public function _needlogin($redirect = TRUE, $system_access = FALSE)
 	{
 		$this->account = new account_model();
-		if($this->session->userdata('login')){			
+		if($this->session->userdata('login'))
+		{			
 			$this->account->name = $this->session->userdata('accountName');
 			$this->account->password = $this->session->userdata('accountPassword');
 			if(!$this->account->login())
@@ -593,17 +595,19 @@ class Account extends MX_Controller {
 					return FALSE;
 				}
 			}
+
 			$this->session->set_userdata(
 							array(
 								'login' => TRUE,
 								'accountID' => $this->account->id,
 								'accountName' => $this->account->name, 
-								'login_acess' => $this->account->login_acess
+								'group_access' => $this->account->group_access
 								)
 						);
-			if($acess)
-			{
-				if($this->session->userdata('login_acess') >= $acess)
+
+			if($system_access)
+			{		
+				if(modules::run('Security/AuthenticPermissions', $system_access, $this->account->group_access))
 				{
 					return $this->account;
 				}
@@ -611,7 +615,7 @@ class Account extends MX_Controller {
 				{
 					if($redirect)
 					{
-						redirect('account', 'location');	
+						redirect('account', 'location', 301);	
 					}
 					else
 					{
@@ -622,6 +626,17 @@ class Account extends MX_Controller {
 			}
 			else
 			{
+				/**
+				 * Caso o administrador querer forçar o usuário a re-fazer o login
+				 */
+				if( $this->account->reforce_login == '1' )
+				{
+					$this->account->reforce_login = 0;
+					$this->account->save();
+					self::logout(array('body' => 'LOGIN_TIME_EXPECTED', 'type' => 'alert', 'sprintf' => array( config_item( 'time_active_login' ) ) ) );
+
+				}
+
 				// Verifica se o usuário fico inativo na página pelo tempo configurado.
 				if ($this->session->userdata('active_time')) 
 				{
@@ -706,7 +721,7 @@ class Account extends MX_Controller {
 							'accountID' => $u->id,
 							'accountName' => $this->input->post('name'), 
 							'accountPassword' => $this->input->post('password'),
-							'login_acess' => $u->login_acess, 
+							'group_access' => $u->group_access, 
 							)
 					);
 					if($this->session->flashdata('locateHeader'))
