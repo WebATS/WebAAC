@@ -90,8 +90,14 @@ class Profile extends MX_Controller {
 			if ($result_profiles->value3) 
 			{
 				$array = json_decode($result_profiles->value3);
-				krsort($array);
-				$data['list_profiles_visited'] = $array;
+				$data['list_profiles_visited'] = FALSE;
+				if( is_array( $array ) )
+				{
+					krsort($array);
+					$data['list_profiles_visited'] = $array;
+				}
+				
+				
 			}
 		}
 		
