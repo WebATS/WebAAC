@@ -11,7 +11,7 @@ class page extends MX_Controller
 	public function view()
 	{
 		$page = $this->uri->segment(3);
-		
+
 		if($this->load->Check_View($page))
 		{
 			$this->load->view($page);
