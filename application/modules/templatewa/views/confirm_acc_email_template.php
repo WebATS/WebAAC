@@ -1,2 +1,0 @@
-<p><?php echo $this->lang->line('EMAIL_CONFIRM_ACC'); ?><p> 
-<a href="<?php echo base_url().'account/confirm/'.$hash_key.config_item('url_suffix'); ?>"><?php echo $this->lang->line('ACTIVE_ACC_LINK'); ?></a>
