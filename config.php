@@ -59,7 +59,11 @@
 	 *  Configurações da engine.
 	 * -------------------------------------------------------------------
 	 */
-			$assign_to_config['time_active_login'] = '1400';		
+			$assign_to_config['time_active_login'] = '1400';	
+
+			$assign_to_config['time_cache_modulosapp'] = '300';	
+
+			$assign_to_config['cache_type'] = 'file';	
 
 		/*
 		 * -------------------------------------------------------------------
