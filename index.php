@@ -1,6 +1,7 @@
 <?php // Gostamos de bacon.
 
 ob_start();
+define('URLSLASH', '/');
 
 /*
  *---------------------------------------------------------------
@@ -273,13 +274,13 @@ try{
 
 	($controller == 'admin' and file_exists(TPLDIR.config_item('layout_admin').'/template.tpl')) ? $smarty->template_dir = TPLDIR.config_item('layout_admin').'' : FALSE;
 	
-	$var_array = modules::run('templatewa/templatewa/getmenucategorias');
+	$var_array = modules::run('webats/templatewa/getmenucategorias');
 	(is_array($var_array)) ? $smarty->assign('menuCategorias', $var_array) : $smarty->assign('menuCategorias', FALSE);
 
-	$var_array = modules::run('templatewa/templatewa/getlangs');
+	$var_array = modules::run('webats/templatewa/getlangs');
 	(is_array($var_array)) ? $smarty->assign('langs', $var_array) : $smarty->assign('langs', FALSE);
 
-	$var_array = modules::run('templatewa/templatewa/getmenu');
+	$var_array = modules::run('webats/templatewa/getmenu');
 	(is_array($var_array)) ? $smarty->assign('menuLeft', $var_array) : $smarty->assign('menuLeft', FALSE);
 
 
