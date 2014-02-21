@@ -70,26 +70,43 @@ class DMZ_Array {
 		return $result;
 	}
 
+
 	/**
 	 * Convert the entire $object->all array result set into an array of
 	 * associative arrays.
-	 *
 	 * @see		to_array
 	 * @param	DataMapper $object The DataMapper Object to convert
 	 * @param	array $fields Array of fields to include.  If empty, includes all database columns.
+	 * @param string $key_field Key Field array
 	 * @return	array An array of associative arrays.
 	 */
-	function all_to_array($object, $fields = '')
+	function all_to_array($object, $fields = '', $key_field = '')
 	{
-		// loop through each object in the $all array, convert them to
-		// an array, and add them to a new array.
 		$result = array();
-		foreach($object as $o)
+
+		if ( $key_field == '' )
 		{
-			$result[] = $o->to_array($fields);
+			foreach($object as $o)
+			{
+				$result[] = $o->to_array($fields);
+			}
+		}
+		else
+		{
+			foreach($object as $o)
+			{
+				if ( ! is_array($fields) )
+				{
+					$result[$o->{$key_field}] = $o->{$fields};
+				}
+				else
+				{
+					$result[$o->{$key_field}] = $o->to_array($fields);
+				}
+			}
 		}
 		return $result;
-	}
+	} 
 
 	/**
 	 * Convert a single field from the entire $object->all array result set into an a single array
