@@ -105,7 +105,7 @@
 			$assign_to_config['worlds_pass_type'][ 1 ] = 'plain';
 
 			$assign_to_config['world_atived'][ 0 ] = TRUE;
-			$assign_to_config['world_atived'][ 1 ] = FALSE;
+			$assign_to_config['world_atived'][ 1 ] = TRUE;
 
 
 		/*
