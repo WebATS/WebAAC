@@ -32,6 +32,7 @@ Changelog
 ======
 
 v0.1 (13/02/2014) - Projeto disponível para pull request.
+v0.2 (21/02/2014) - Alterado camada de segurança da aplicação e melhorado a engine para optimização do tempo de carregamento da página.
 
 ======
 
