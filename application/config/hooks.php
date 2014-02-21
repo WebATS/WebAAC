@@ -10,9 +10,9 @@
 |
 */
 $hook['post_controller'][] = array(
-	'class' => 'Check_Modulo',
+	'class' => 'Modulos',
 	'function' => 'DisplayModulos',
-	'filename' => 'LibModulo.php',
+	'filename' => 'Modulos.php',
 	'filepath' => 'hooks'
 );
 /* End of file hooks.php */
