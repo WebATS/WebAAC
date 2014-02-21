@@ -1,1 +1,1 @@
-<center><img src="<?php echo base_url().TPLLAYOUTDIR; ?>images/perso/lost.png"></center>
+<img src="<?php echo base_url().TPLLAYOUTDIR; ?>images/perso/lost.png">
