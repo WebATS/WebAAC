@@ -88,13 +88,13 @@ class Error extends MX_Controller {
 				'type' => $type,
 				'system' => $system
 				);	
-		if($this->load->Check_View('templatewa/'.$template))
+		if($this->load->Check_View('webats/'.$template))
 		{
-			$this->load->view('templatewa/'.$template, $data);
+			$this->load->view('webats/'.$template, $data);
 		}
 		else
 		{
-			if($this->load->Check_View('templatewa/error')){
+			if($this->load->Check_View('webats/error')){
 				self::displayError('Erro ao localizar arquivo view de erro: '.$template.'.php');
 			}
 			else
