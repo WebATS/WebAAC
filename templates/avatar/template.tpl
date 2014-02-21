@@ -133,8 +133,7 @@ $(function () {
 });    </script>
 </head>
 <body onbeforeunload="SaveMenu();" onunload="SaveMenu();">
-  <a name="top" ></a>
-    {php} echo modules::run('shop/_popimg'); echo modules::run('rewards_players/_popimg'); {/php}
+  <a name="top" ></a>   
   <div id="ArtworkHelper" style="background-image:url({$template_path}/images/global/header/background-artwork.jpg);">
        <div id="Artlog" style="background-image:url({$template_path}/images/perso/logo.png);"></div>
     <div id="DeactivationContainer" ></div>
