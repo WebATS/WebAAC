@@ -13,7 +13,7 @@ class multworld extends MX_Controller {
 		 * Mostrando formulário apenas quando tiver mais de um mundo ativado.
 		 */
 		
-		if( count( $this->multworlds->worlds )  >= 2 )
+		if( count( $this->multworlds->worlds )  > 1 )
 		{
 			$data['multworlds'] = $this->multworlds;
 			$this->load->view('form_mult_world', $data);
